@@ -4,15 +4,15 @@
         .empty
         .empty
         .gallery-wrapper
-            img.picture#i-1-1(src="./assets/GALLERY - 1.png", @click.stop="showSwiper")
-            img.picture#i-1-2(src="./assets/GALLERY - 2.png", @click.stop="showSwiper")
-            img.picture#i-1-3(src="./assets/GALLERY - 3.png", @click.stop="showSwiper")
-            img.picture#i-2-1(src="./assets/GALLERY - 4.png", @click.stop="showSwiper")
-            img.picture#i-2-2(src="./assets/GALLERY - 5.png", @click.stop="showSwiper")
-            img.picture#i-2-3(src="./assets/GALLERY - 6.png", @click.stop="showSwiper")
-            img.picture#i-3-1(src="./assets/GALLERY - 7.png", @click.stop="showSwiper")
-            img.picture#i-3-2(src="./assets/GALLERY - 8.png", @click.stop="showSwiper")
-            img.picture#i-3-3(src="./assets/GALLERY - 9.png", @click.stop="showSwiper")
+            img.picture#i-1-1(src="./assets/GALLERY - 1.jpg", @click.stop="showSwiper")
+            img.picture#i-1-2(src="./assets/GALLERY - 2.jpg", @click.stop="showSwiper")
+            img.picture#i-1-3(src="./assets/GALLERY - 3.jpg", @click.stop="showSwiper")
+            img.picture#i-2-1(src="./assets/GALLERY - 4.jpg", @click.stop="showSwiper")
+            img.picture#i-2-2(src="./assets/GALLERY - 5.jpg", @click.stop="showSwiper")
+            img.picture#i-2-3(src="./assets/GALLERY - 6.jpg", @click.stop="showSwiper")
+            img.picture#i-3-1(src="./assets/GALLERY - 7.jpg", @click.stop="showSwiper")
+            img.picture#i-3-2(src="./assets/GALLERY - 8.jpg", @click.stop="showSwiper")
+            img.picture#i-3-3(src="./assets/GALLERY - 9.jpg", @click.stop="showSwiper")
         .empty
 
         .zoom-overlay
@@ -20,26 +20,44 @@
         .swiper-wrapper(ref="swiperWrapper", @click="closeSwiper")
             .swiper
                 .img-wrapper
-                    img.picture(src="./assets/GALLERY - 1.png")
+                    img.picture(src="./assets/GALLERY - 1.jpg")
+                    figcaption(:class="{ visible: this.isCaptionVisible}")
+                        span Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, nostrum.
                 .img-wrapper
-                    img.picture(src="./assets/GALLERY - 2.png")
+                    img.picture(src="./assets/GALLERY - 2.jpg")
+                    figcaption(:class="{ visible: this.isCaptionVisible}")
+                        span Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, nostrum.
                 .img-wrapper
-                    img.picture(src="./assets/GALLERY - 3.png")
+                    img.picture(src="./assets/GALLERY - 3.jpg")
+                    figcaption(:class="{ visible: this.isCaptionVisible}")
+                        span Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, nostrum.
                 .img-wrapper
-                    img.picture(src="./assets/GALLERY - 4.png")
+                    img.picture(src="./assets/GALLERY - 4.jpg")
+                    figcaption(:class="{ visible: this.isCaptionVisible}")
+                        span Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, nostrum.
                 .img-wrapper
-                    img.picture(src="./assets/GALLERY - 5.png")
+                    img.picture(src="./assets/GALLERY - 5.jpg")
+                    figcaption(:class="{ visible: this.isCaptionVisible}")
+                        span Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, nostrum.
                 .img-wrapper
-                    img.picture(src="./assets/GALLERY - 6.png")
+                    img.picture(src="./assets/GALLERY - 6.jpg")
+                    figcaption(:class="{ visible: this.isCaptionVisible}")
+                        span Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, nostrum.
                 .img-wrapper
-                    img.picture(src="./assets/GALLERY - 7.png")
+                    img.picture(src="./assets/GALLERY - 7.jpg")
+                    figcaption(:class="{ visible: this.isCaptionVisible}")
+                        span Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, nostrum.
                 .img-wrapper
-                    img.picture(src="./assets/GALLERY - 8.png")
+                    img.picture(src="./assets/GALLERY - 8.jpg")
+                    figcaption(:class="{ visible: this.isCaptionVisible}")
+                        span Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, nostrum.
                 .img-wrapper
-                    img.picture(src="./assets/GALLERY - 9.png")
+                    img.picture(src="./assets/GALLERY - 9.jpg")
+                    figcaption(:class="{ visible: this.isCaptionVisible}")
+                        span Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facere, nostrum.
 
-        img.nav-left(v-show="isNavVisible", src="./assets/ICON - LEFT.svg", @click="switchSlide('prev')")
-        img.nav-right(v-show="isNavVisible", src="./assets/ICON - RIGHT.svg", @click="switchSlide('next')")
+        img.nav-left(v-show="isNavVisible", src="./assets/ICON - LEFT.svg", @click="moveToSlide(currentSlideIdx - 1)")
+        img.nav-right(v-show="isNavVisible", src="./assets/ICON - RIGHT.svg", @click="moveToSlide(currentSlideIdx + 1)")
 
         button.close(v-show="isNavVisible", @click.stop="closeSwiper")
             | <svg xmlns="http://www.w3.org/2000/svg" width="21.115" height="16.92" viewBox="0 0 21.115 16.92">
@@ -52,236 +70,351 @@
 <script>
 
 
-  export default {
-    name: 'app',
-    computed: {
+    import o9n from "o9n";
+    import {isMobile, isBrowser} from 'mobile-device-detect';
 
-      numberOfSlides() {
-        return $( '.img-wrapper' ).length;
-      },
+    export default {
+        name: 'app',
+        watch: {
 
-      swiperWrapper() {
-        return $( '.swiper-wrapper' )
-      },
+            isCaptionVisible(visible) {
+                if (visible) this.figCaption.css('bottom', 0);
+                else this.figCaption.css('bottom', '');
+            }
 
-      zoomOverlay() {
-        return $( '.zoom-overlay' )
-      }
+        },
+        computed: {
+
+            numberOfSlides() {
+                return $('.img-wrapper').length;
+            },
+
+            swiperWrapper() {
+                return $('.swiper-wrapper')
+            },
+
+            zoomOverlay() {
+                return $('.zoom-overlay')
+            },
+
+            swiperImages() {
+                return $('.img-wrapper .picture');
+            },
+
+            figCaption() {
+                return $('figcaption');
+            }
+        },
+        methods: {
+
+            moveToSlide(slideIdx) {
+
+                gsap.to(this.swiperWrapper, 0.5, {
+                    left: slideIdx > 0 ? `-${window.innerWidth * slideIdx}px` : 0
+                });
+
+                this.currentSlideIdx = slideIdx;
+                this.updateNavs();
+
+            },
+
+            updateNavs() {
+
+                let $navLeft = $('.nav-left'),
+                    $navRight = $('.nav-right');
+
+                if (this.currentSlideIdx === 0) {
+                    $navLeft.css('left', '-100px');
+                } else $navLeft.css('left', '');
+
+                if (this.currentSlideIdx === this.numberOfSlides - 1) {
+                    $navRight.css('left', '100vw');
+                } else $navRight.css('left', '');
+
+            },
+
+            setGalleryPicturesWidth() {
+
+                this.newWidth = window.innerHeight * 0.862;
+
+                if (o9n.orientation.type === 'portrait-primary' && isMobile) {
+                    this.newWidth = window.innerWidth;
+                    this.figCaption.css('width', '100%');
+                } else {
+                    this.figCaption.width(this.newWidth);
+                }
+
+                this.swiperImages.width(this.newWidth);
+
+            },
+
+            setPicturesHeight() {
+
+                let $galleryImages = $('.gallery-wrapper img');
+                $galleryImages.css('height', ($galleryImages.width() / 0.862) + 'px');
+
+            },
+
+            activateGestures() {
+
+                let press, swipe, pan;
+
+                this.swiperImages.on('contextmenu', ev => ev.preventDefault());
+
+                if (isMobile) {
+
+                    // PRESS
+
+                    this.swiperImages.each((idx, image) => {
+                        press = new Hammer(image, {time: 500});
+                        press.on('press', () => {
+                            this.isCaptionVisible = true;
+                        });
+                        press.on('pressup', () => {
+                            this.isCaptionVisible = false;
+                        });
+
+                        // SWIPE
+
+                        let threshold = 0.1 * window.innerWidth;
+
+                        swipe = new Hammer(image);
+
+                        let startX, delta, currentLeft;
+
+                        pan = new Hammer(image);
+                        pan.on('panstart', ev => {
+                            startX = ev.srcEvent.pageX;
+                            currentLeft = parseInt(this.swiperWrapper.css('left'));
+                        });
+
+                        pan.on('panmove', ev => {
+                            delta = ev.srcEvent.pageX - startX;
+                            this.swiperWrapper.css('left', currentLeft + delta + 'px');
+                        });
+
+                        pan.on('panend', ev => {
+
+                            if (delta > threshold) {
+                                this.moveToSlide(this.currentSlideIdx - 1)
+                            } else this.moveToSlide(this.currentSlideIdx);
+
+                            if (delta < (-1) * threshold) {
+                                this.moveToSlide(this.currentSlideIdx + 1)
+                            } else this.moveToSlide(this.currentSlideIdx)
 
 
-    },
-    methods: {
-
-      setPicturesHeight() {
-
-        let $galleryImages = $( '.gallery-wrapper img' );
-        $galleryImages.css( 'height', ( $galleryImages.width() / 0.75 ) + 'px' );
-
-      },
-
-      setSwiper() {
-        this.swiperWrapper.css( 'style', '' ).width( window.innerWidth * 9 );
-
-      },
-
-      positionSwiper() {
-        this.swiperWrapper
-          .css( 'left', `-${window.innerWidth * this.currentSlideIdx}px` );
-      },
-
-      showSwiper( ev ) {
-
-        $( 'body' ).css( 'overflow', 'hidden' ); // Disable scroll
-        this.zoomOverlay.toggle();
-        gsap.to( this.zoomOverlay, 0.2, { alpha: 1 } );
-
-        let { top, left, width, height } = ev.target.getBoundingClientRect();
-
-        let $clone = $( ev.target ).clone().css('filter', 'brightness(1)');
-
-        $clone.css( {
-          position: 'absolute',
-          top: top.toFixed( 2 ) + 'px',
-          left: left.toFixed( 2 ) + 'px',
-          width: width.toFixed( 2 ) + 'px',
-          height: height.toFixed( 2 ) + 'px'
-        } ).appendTo( this.zoomOverlay[0] );
+                        })
 
 
-        let newWidth = window.innerHeight * 0.75;
 
-        gsap.to( $clone, 0.6, {
+                    });
 
-          top: 0,
-          left: ( window.innerWidth / 2 ) - ( newWidth / 2 ),
-          width: newWidth,
-          height: '100%',
-          callBackScope: this,
+                }
 
-          onComplete: () => {
+                if (isBrowser) {
 
-            this.currentSlideIdx = $( '.gallery-wrapper img' ).index( ev.target );
+                    this.swiperImages.on('click', () => {
+                        this.isCaptionVisible = !this.isCaptionVisible;
+                    })
 
-            this.setSwiper();
-            this.positionSwiper();
-            this.zoomOverlay.toggle();
-            this.swiperWrapper.toggle();
-            $clone.remove();
-            this.isNavVisible = true;
+                }
+
+            },
+
+            setSwiper() {
+
+                this.swiperWrapper.css('style', '').width(window.innerWidth * 9);
+
+                this.setGalleryPicturesWidth();
+                this.updateNavs();
+
+            },
+
+            positionSwiper() {
+                this.swiperWrapper
+                    .css('left', `-${window.innerWidth * this.currentSlideIdx}px`);
+            },
+
+            showSwiper(ev) {
+
+                $('body').css('overflow', 'hidden'); // Disable scroll
+                this.zoomOverlay.toggle();
+                gsap.to(this.zoomOverlay, 0.4, {opacity: 1});
+
+                let {top, left, width, height} = ev.target.getBoundingClientRect();
+
+                let $clone = $(ev.target).clone().css('filter', 'brightness(1)');
+
+                $clone.css({
+                    position: 'absolute',
+                    top: top.toFixed(2) + 'px',
+                    left: left.toFixed(2) + 'px',
+                    width: width.toFixed(2) + 'px',
+                    height: height.toFixed(2) + 'px'
+                }).appendTo(this.zoomOverlay[0]);
 
 
-          }
+                this.setGalleryPicturesWidth();
+                gsap.to($clone, 0.6, {
+
+                        top: 0,
+                        left: (window.innerWidth / 2) - (this.newWidth / 2),
+                        width: this.newWidth,
+                        height: window.innerHeight,
+                        delay: 0.42,
+
+                        onComplete: () => {
+
+                            this.currentSlideIdx = $('.gallery-wrapper img').index(ev.target);
+
+                            this.setSwiper();
+                            this.positionSwiper();
+
+                            this.swiperWrapper.toggle();
+                            $clone.remove();
+                            this.isNavVisible = true;
+
+                        }
+                    },
+                );
+
+
+            },
+
+            closeSwiper(ev) {
+                if (ev.target.tagName !== 'IMG') {
+
+                    this.zoomOverlay.css('opacity', 0).toggle();
+                    this.swiperWrapper.toggle();
+                    $('body').css('overflow', 'scroll'); // Enable scroll
+
+                    this.isNavVisible = false;
+                }
+
+            }
+
+
+        },
+
+        data() {
+
+            return {
+
+                // SWIPER
+
+                isNavVisible: false,
+                isCaptionVisible: false,
+                currentSlideIdx: undefined,
+                newWidth: undefined
+
+            }
+
         },
 
 
-      );
+        mounted() {
 
 
+            let t1_1 = gsap.to('#i-1-1', 1, {top: '-10.5%'});
+            let t1_2 = gsap.to('#i-1-2', 1, {top: '-14%'});
+            let t1_3 = gsap.to('#i-1-3', 1, {top: '-11%'});
 
-      },
+            let t2_1 = gsap.to('#i-2-1', 1, {top: '-32%'});
+            let t2_2 = gsap.to('#i-2-2', 1, {top: '-34%'});
+            let t2_3 = gsap.to('#i-2-3', 1, {top: '-30%'});
 
-      closeSwiper( ev ) {
-        if ( ev.target.tagName !== 'IMG' ) {
-          this.swiperWrapper.toggle();
-          $( 'body' ).css( 'overflow', 'scroll' ); // Enable scroll
+            let t3_1 = gsap.to('#i-3-1', 1, {top: '-53%'});
+            let t3_2 = gsap.to('#i-3-2', 1, {top: '-49%'});
+            let t3_3 = gsap.to('#i-3-3', 1, {top: '-51%'});
 
-          this.isNavVisible = false;
-        }
+            const scenes = {
 
-      },
+                '#i-1-1': t1_1,
+                '#i-1-2': t1_2,
+                '#i-1-3': t1_3,
 
-      switchSlide( direction ) {
+                '#i-2-1': t2_1,
+                '#i-2-2': t2_2,
+                '#i-2-3': t2_3,
 
-        if ( !direction ) throw new Error( 'Direction must be provided.' );
+                '#i-3-1': t3_1,
+                '#i-3-2': t3_2,
+                '#i-3-3': t3_3
 
-        if ( direction === 'next' && ( this.currentSlideIdx + 1 < this.numberOfSlides ) ) {
-          gsap.to( this.swiperWrapper, 0.5, { left: `-=${window.innerWidth}` } );
-          this.currentSlideIdx++;
-        }
+            };
 
-        if ( direction === 'prev' && ( this.currentSlideIdx - 1 >= 0 ) ) {
-          gsap.to( this.swiperWrapper, 0.5, { left: `+=${window.innerWidth}` } );
-          this.currentSlideIdx--;
-        }
+            let controller = new ScrollMagic.Controller();
 
+            for (let element in scenes) {
+                if (scenes.hasOwnProperty(element)) {
 
-      },
+                    new ScrollMagic.Scene({
+                        triggerElement: element,
+                        duration: '150%',
+                        triggerHook: 1
+                    })
+                        .setTween(scenes[element])
+                        // .addIndicators()
+                        .addTo(controller);
 
-    },
+                }
+            }
 
-    data() {
+            for (let element in scenes) {
+                if (scenes.hasOwnProperty(element)) {
 
-      return {
+                    new ScrollMagic.Scene({
+                        triggerElement: element,
+                        duration: '75%',
+                        triggerHook: 0.95
+                    })
+                        .setTween(gsap.to(element,
+                            {
+                                webkitFilter: 'brightness(1)',
+                                duration: 0.01
+                            }
+                        ))
+                        // .addIndicators()
+                        .addTo(controller);
 
-        // SWIPER
+                    new ScrollMagic.Scene({
+                        triggerElement: element,
+                        duration: '75%',
+                        triggerHook: 0.2
+                    })
+                        .setTween(gsap.to(element,
+                            {
+                                webkitFilter: 'brightness(0)',
+                                duration: 0.01
+                            }
+                        ))
+                        // .addIndicators()
+                        .addTo(controller);
 
-        isNavVisible: false,
-        currentSlideIdx: undefined
+                }
+            }
 
-      }
+            let vm = this;
+            this.setPicturesHeight();
+            this.activateGestures();
 
-    },
+            $(window).on('resize', () => {
+                vm.setPicturesHeight();
+                vm.setSwiper();
+                vm.positionSwiper();
 
+            });
 
-    mounted() {
-
-
-      let t1_1 = gsap.to( '#i-1-1', 1, { top: '-10.5%' } );
-      let t1_2 = gsap.to( '#i-1-2', 1, { top: '-14%' } );
-      let t1_3 = gsap.to( '#i-1-3', 1, { top: '-11%' } );
-
-      let t2_1 = gsap.to( '#i-2-1', 1, { top: '-32%' } );
-      let t2_2 = gsap.to( '#i-2-2', 1, { top: '-34%' } );
-      let t2_3 = gsap.to( '#i-2-3', 1, { top: '-30%' } );
-
-      let t3_1 = gsap.to( '#i-3-1', 1, { top: '-50%' } );
-      let t3_2 = gsap.to( '#i-3-2', 1, { top: '-46%' } );
-      let t3_3 = gsap.to( '#i-3-3', 1, { top: '-48%' } );
-
-      const scenes = {
-
-        '#i-1-1': t1_1,
-        '#i-1-2': t1_2,
-        '#i-1-3': t1_3,
-
-        '#i-2-1': t2_1,
-        '#i-2-2': t2_2,
-        '#i-2-3': t2_3,
-
-        '#i-3-1': t3_1,
-        '#i-3-2': t3_2,
-        '#i-3-3': t3_3
-
-      };
-
-      let controller = new ScrollMagic.Controller();
-
-      for ( let element in scenes ) {
-        if ( scenes.hasOwnProperty( element ) ) {
-
-          new ScrollMagic.Scene( {
-            triggerElement: element,
-            duration: '150%',
-            triggerHook: 1
-          } )
-            .setTween( scenes[element] )
-            // .addIndicators()
-            .addTo( controller );
-
-        }
-      }
-
-      for ( let element in scenes ) {
-        if ( scenes.hasOwnProperty( element ) ) {
-
-          new ScrollMagic.Scene( {
-            triggerElement: element,
-            duration: '75%',
-            triggerHook: 0.95
-          } )
-            .setTween( gsap.to( element,
-              {
-                webkitFilter: 'brightness(1)',
-                duration: 0.01
-              }
-            ) )
-            // .addIndicators()
-            .addTo( controller );
-
-          new ScrollMagic.Scene( {
-            triggerElement: element,
-            duration: '75%',
-            triggerHook: 0.2
-          } )
-            .setTween( gsap.to( element,
-              {
-                webkitFilter: 'brightness(0)',
-                duration: 0.01
-              }
-            ) )
-            // .addIndicators()
-            .addTo( controller );
 
         }
-      }
-
-      let vm = this;
-      this.setPicturesHeight();
-      $( window ).on( 'resize', () => {
-        vm.setPicturesHeight();
-        vm.setSwiper();
-        vm.positionSwiper();
-
-      } );
 
 
     }
-
-
-  }
 </script>
 
 <style lang="scss">
+
 
     .empty {
         height: 50vh;
@@ -498,18 +631,41 @@
 
             .img-wrapper {
                 display: flex;
+                position: relative;
                 justify-content: center;
                 align-items: center;
                 width: 100vw;
 
-                .picture {
-                    height: 100vh;
+            }
+
+            figcaption {
+                position: absolute;
+                bottom: -4rem;
+                padding: 1rem;
+                background: black;
+                color: white;
+                opacity: 0.75;
+
+                transition: bottom 0.5s ease-in-out;
+
+                box-sizing: border-box;
+
+                &.visible {
+                    bottom: 0;
+                }
+
+                span {
+                    display: block;
+                    text-align: center;
                 }
 
             }
+
+            .picture {
+                height: 100vh;
+            }
+
         }
-
-
     }
 
 

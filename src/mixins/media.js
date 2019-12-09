@@ -1,13 +1,8 @@
 import { isMobile, isBrowser, deviceDetect } from 'mobile-device-detect';
-import { MobileOrientation }  from 'mobile-orientation';
+import o9n from 'o9n';
+
 
 export default {
-
-  data() {
-    return {
-      orientation: new MobileOrientation()
-    }
-  },
 
   methods: {
     deviceDetect
